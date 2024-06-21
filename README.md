@@ -1,4 +1,4 @@
-# README - Cloud Healthcare Unit Project
+# README - Cloud Healthcare Unit Project (English)
 
 ## Authors
 **Oussama ALI-BEY, Alen AMIRBEKYAN, Adam MAHRAOUI, Antonin RUDONI**  
@@ -92,7 +92,7 @@ After populating the tables with relevant data and observing the benefits of par
 
 ------------------------------------------------------------------------------------
 
-# README - Projet Cloud Healthcare Unit
+# README - Projet Cloud Healthcare Unit (French)
 
 ## Auteurs
 **Oussama ALI-BEY, Alen AMIRBEKYAN, Adam MAHRAOUI, Antonin RUDONI**  
