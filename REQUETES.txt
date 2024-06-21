@@ -1,0 +1,88 @@
+-- Créer la nouvelle table consultation_partitionnee
+CREATE TABLE consultation_partitionnee (
+    id_consultation BIGINT,
+    jour_consultation BIGINT,
+    mois_consultation BIGINT,
+    motif STRING,
+    id_pro BIGINT,
+    id_diagnostique STRING,
+    id_patient BIGINT
+)
+PARTITIONED BY (annee_consultation BIGINT)
+CLUSTERED BY (id_diagnostique) INTO X BUCKETS;
+-- Insérer les données de l'ancienne table dans la nouvelle table avec partitionnement
+INSERT OVERWRITE TABLE consultation_partitionnee
+PARTITION (annee_consultation)
+SELECT id_consultation, jour_consultation, mois_consultation, motif, id_pro, id_diagnostique, id_patient, annee_consultation
+FROM consultation;
+
+
+
+-- Créer la nouvelle table etablissement_partitionnee
+CREATE TABLE etablissement_partitionnee (
+    id_etablissement STRING,
+    nom_etablissement STRING
+)
+PARTITIONED BY (departement BIGINT);
+
+-- Insérer les données de l'ancienne table dans la nouvelle table avec partitionnement
+INSERT OVERWRITE TABLE etablissement_partitionnee
+PARTITION (departement)
+SELECT id_etablissement, departement, nom_etablissement
+FROM etablissement;
+
+
+
+-- Créer la nouvelle table hospitalisation_partitionnee
+CREATE TABLE hospitalisation_partitionnee (
+    id_hospitalisation BIGINT,
+    jour BIGINT,
+    mois BIGINT,
+    annee BIGINT,
+    nb_jours_hospitalisation BIGINT,
+    id_diagnostique STRING,
+    id_patient BIGINT,
+)
+PARTITIONED BY (id_etablissement STRING)
+CLUSTERED BY (annee) INTO X BUCKETS;
+-- Insérer les données de l'ancienne table dans la nouvelle table avec partitionnement
+INSERT OVERWRITE TABLE hospitalisation_partitionnee
+PARTITION (id_etablissement)
+SELECT id_hospitalisation, jour, mois, annee, nb_jours_hospitalisation, id_diagnostique, id_patient, id_etablissement
+FROM hospitalisation;
+
+
+-- Créer la nouvelle table patient_partitionnee
+CREATE TABLE patient_partitionnee (
+    id_patient BIGINT,
+    sexe STRING,
+    jour_naissance BIGINT,
+    mois_naissance BIGINT,
+    taille BIGINT,
+    poids DOUBLE,
+    groupe_sanguin STRING
+)
+PARTITIONED BY (annee_naissance BIGINT);
+-- Insérer les données de l'ancienne table dans la nouvelle table avec partitionnement
+INSERT OVERWRITE TABLE patient_partitionnee
+PARTITION (annee_naissance)
+SELECT id_patient, sexe, jour_naissance, mois_naissance, taille, poids, groupe_sanguin, annee_naissance
+FROM patient;
+
+
+
+-- Créer la nouvelle table professionnel_partitionnee
+CREATE TABLE professionnel_partitionnee (
+    id_pro BIGINT,
+    nom STRING,
+    prenom STRING,
+    sexe STRING,
+    categorie_pro STRING,
+    id_etablissement STRING,
+)
+PARTITIONED BY (profession STRING, specialite STRING);
+-- Insérer les données de l'ancienne table dans la nouvelle table avec partitionnement
+INSERT OVERWRITE TABLE professionnel_partitionnee
+PARTITION (profession, specialite)
+SELECT id_pro, nom, prenom, sexe, categorie_pro, id_etablissement
+FROM professionnel;
